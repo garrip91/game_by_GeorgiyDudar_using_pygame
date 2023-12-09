@@ -1,0 +1,8 @@
+__pycache__/*
+.pytest_cache/*
+*.pyc
+game_by_GeorgiyDudar_using_pygame_GitHubToken.txt
+venv/
+.git/*
+.vscode/*
+
