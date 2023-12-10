@@ -7,10 +7,21 @@ pygame.display.set_caption("Pygame itProger Game")
 icon = pygame.image.load("images/icon.png")
 pygame.display.set_icon(icon)
 
+square = pygame.Surface((50, 170))
+square.fill("Blue")
+
+myfont = pygame.font.Font("fonts/Roboto-Black.ttf", 40)
+text_surface = myfont.render("itProger", True, "Red")
+
+player = pygame.image.load("images/icon.png")
+
 running = True
 while running:
 
-    # screen.fill((114, 157, 224))
+    pygame.draw.circle(square, "Red", (10, 7), 5)
+    screen.blit(square, (10, 0))
+    screen.blit(text_surface, (300, 100))
+    screen.blit(player, (100, 50))
 
     pygame.display.update()
 
@@ -18,6 +29,3 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
-                screen.fill((70, 44, 133))
