@@ -6,27 +6,31 @@ clock = pygame.time.Clock()
 pygame.init()
 screen = pygame.display.set_mode((1280, 748)) # , flags=pygame.NOFRAME
 pygame.display.set_caption("Pygame itProger Game")
-icon = pygame.image.load("images/icon.png")
+icon = pygame.image.load("images/icon.png").convert_alpha()
 pygame.display.set_icon(icon)
 
-bg = pygame.image.load("images/bg.png")
-# player = pygame.image.load("images/idle.png")
+# Player
+bg = pygame.image.load("images/bg.png").convert_alpha()
+# player = pygame.image.load("images/idle.png").convert_alpha()
 walk_left = [
-    pygame.image.load("images/player_left/player_left1.png"),
-    pygame.image.load("images/player_left/player_left2.png"),
-    pygame.image.load("images/player_left/player_left3.png"),
-    pygame.image.load("images/player_left/player_left4.png"),
-    pygame.image.load("images/player_left/player_left5.png"),
-    pygame.image.load("images/player_left/player_left6.png")
+    pygame.image.load("images/player_left/player_left1.png").convert_alpha(),
+    pygame.image.load("images/player_left/player_left2.png").convert_alpha(),
+    pygame.image.load("images/player_left/player_left3.png").convert_alpha(),
+    pygame.image.load("images/player_left/player_left4.png").convert_alpha(),
+    pygame.image.load("images/player_left/player_left5.png").convert_alpha(),
+    pygame.image.load("images/player_left/player_left6.png").convert_alpha()
 ]
 walk_right = [
-    pygame.image.load("images/player_right/player_right1.png"),
-    pygame.image.load("images/player_right/player_right2.png"),
-    pygame.image.load("images/player_right/player_right3.png"),
-    pygame.image.load("images/player_right/player_right4.png"),
-    pygame.image.load("images/player_right/player_right5.png"),
-    pygame.image.load("images/player_right/player_right6.png")
+    pygame.image.load("images/player_right/player_right1.png").convert_alpha(),
+    pygame.image.load("images/player_right/player_right2.png").convert_alpha(),
+    pygame.image.load("images/player_right/player_right3.png").convert_alpha(),
+    pygame.image.load("images/player_right/player_right4.png").convert_alpha(),
+    pygame.image.load("images/player_right/player_right5.png").convert_alpha(),
+    pygame.image.load("images/player_right/player_right6.png").convert_alpha()
 ]
+
+ghost = pygame.image.load("images/ghost.png").convert_alpha()
+ghost_list_in_game = []
 
 player_anim_count = 0
 bg_x = 0
@@ -36,16 +40,29 @@ player_x = 320
 player_y = 550
 
 is_jump = False
-jump_count = 7
+jump_count = 8
 
 bg_sound = pygame.mixer.Sound("sounds/bg.mp3")
 #bg_sound.play()
+
+ghost_timer = pygame.USEREVENT + 1
+pygame.time.set_timer(ghost_timer, 2500)
 
 running = True
 while running:
 
     screen.blit(bg, (bg_x, 0))
     screen.blit(bg, (bg_x + 1280, 0))
+
+    player_rect = walk_left[0].get_rect(topleft=(player_x, player_y))
+    
+    if ghost_list_in_game:
+        for el in ghost_list_in_game:
+            screen.blit(ghost, el)
+            el.x -= 10
+
+            if player_rect.colliderect(el):
+                print("You lose!")
     
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
@@ -62,7 +79,7 @@ while running:
         if keys[pygame.K_SPACE]:
             is_jump = True
     else:
-        if jump_count >= -7:
+        if jump_count >= -8:
             if jump_count > 0:
                 player_y -= (jump_count ** 2) / 2
             else:
@@ -70,7 +87,7 @@ while running:
             jump_count -= 1
         else:
             is_jump = False
-            jump_count = 7
+            jump_count = 8
 
     if player_anim_count == 5:
         player_anim_count = 0
@@ -87,5 +104,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
+        if event.type == ghost_timer:
+            ghost_list_in_game.append(ghost.get_rect(topleft=(1282, 550)))
     
     clock.tick(20)
